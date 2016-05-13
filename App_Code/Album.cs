@@ -47,7 +47,7 @@ public class Album
     /// <param name="p_cote">Une cote d'apréciation ce l'album.</param>
     /// <param name="p_auteur">Le(s) auteur(s) de l'album.</param>
     public Album(int p_numéro, string p_titre, int p_annéeParution, int p_nombrePages, double? p_cote,
-                    Auteur p_auteur, string p_autreAuteur)
+                    Auteur p_auteur)
     {
         if (p_numéro < 1)
             throw new ArgumentOutOfRangeException("p_numéro", "Doit être >= 1");

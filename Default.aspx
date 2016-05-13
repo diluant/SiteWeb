@@ -58,7 +58,7 @@
                             <asp:Button ID="btnModifier" runat="server" Text="Modifier" Width="127px" />
                         </li>
                         <li>
-                            <asp:Button ID="btnRetirer" runat="server" Text="Retirer" Width="127px" OnClick="btnSupprimer_Click" />
+                            <asp:Button ID="btnRetirer" runat="server" Text="Retirer" Width="127px" OnClick="btnRetirer_Click" />
                         </li>
                         <li>
                             <asp:Button ID="btnRechercher" runat="server" Text="Rechercher" Width="127px" OnClick="btnRechercher_Click" />
@@ -68,44 +68,16 @@
             </div> <!-- Aside -->
 
             <div class="main">
-                <asp:DataList ID="ListeAlbums" runat="server" BorderStyle="Groove" GridLines="Both" RepeatColumns="6" BackColor="White" DataKeyField="numéro" DataSourceID="SqlDataSource" Height="300px" Width="600px" RepeatDirection="Horizontal" >
-                    <ItemTemplate>
-                        numéro:
-                        <asp:Label ID="numéroLabel" runat="server" Text='<%# Eval("numéro") %>' />
-                        <br />
-                        titre:
-                        <asp:Label ID="titreLabel" runat="server" Text='<%# Eval("titre") %>' />
-                        <br />
-                        auteur:
-                        <asp:Label ID="auteurLabel" runat="server" Text='<%# Eval("auteur") %>' />
-                        <br />
-                        année_parution:
-                        <asp:Label ID="année_parutionLabel" runat="server" Text='<%# Eval("année_parution") %>' />
-                        <br />
-                        nb_pages:
-                        <asp:Label ID="nb_pagesLabel" runat="server" Text='<%# Eval("nb_pages") %>' />
-                        <br />
-                        cote:
-                        <asp:Label ID="coteLabel" runat="server" Text='<%# Eval("cote") %>' />
-                        <br />
-<br />
-                    </ItemTemplate>
-                </asp:DataList>
-                <asp:RadioButtonList ID="grChoixTri" runat="server" AutoPostBack="True" OnSelectedIndexChanged="grChoixTri_SelectedIndexChanged">
-                    <asp:ListItem>Tri par numéro d&#39;album</asp:ListItem>
-                    <asp:ListItem>Tri par date de parution</asp:ListItem>
+                <asp:ListBox ID="ListeAlbums" runat="server" Width="575px"></asp:ListBox>
+                <asp:RadioButtonList ID="grChoixTri" runat="server">
+                    <asp:ListItem>Lister par numéro d&#39;album</asp:ListItem>
+                    <asp:ListItem>Lister par date de parution</asp:ListItem>
                 </asp:RadioButtonList>
-                <asp:SqlDataSource ID="SqlDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" ProviderName="<%$ ConnectionStrings:ConnectionString.ProviderName %>" SelectCommand="SELECT [numéro], [titre], [auteur], [année_parution], [nb_pages], [cote] FROM [albums]"></asp:SqlDataSource>
             </div> <!-- Main -->
 
             <div class="footer">
 
             </div> <!-- Footer -->
-            <asp:GridView ID="GridView1" runat="server">
-                <Columns>
-                    <asp:TemplateField></asp:TemplateField>
-                </Columns>
-            </asp:GridView>
         </div>
     </form>
 </body>

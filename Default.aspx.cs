@@ -1,33 +1,20 @@
 ﻿using System;
 using System.Data.OleDb;
 using System.Data;
+using System.Collections.Generic;
 
 public partial class _Default:System.Web.UI.Page
 {
-    /*static private void CreateOleDbCommand(string queryString, string connectionString)
-    {
-        using (OleDbConnection connection = new OleDbConnection(connectionString))
-        {
-            connection.Open();
-            OleDbCommand command = new OleDbCommand(queryString, connection);
-            command.ExecuteNonQuery();
-        }
-    }*/
-
     BaseDonnées m_db = BaseDonnées.Instance;
     Album m_album;
-    int m_indiceTri = 0;
 
     protected void Page_Load(object sender, EventArgs e)
     {
         //InitialiserChamps();
-        Lister(SqlLister);
+        List<Album> albums = new List<Album>(m_db.TousLesAlbums(grChoixTri.SelectedIndex));
+        Lister();
+        
     }
-
-    const string chaîneConnexion = "Provider=Microsoft.ACE.OLEDB.12.0;" + 
-                                  @"Data Source=E:\Documents\Dev\Programmation II\WebSite\Astérix.accdb";
-    const string SqlLister = "SELECT * " +
-                             "FROM albums ";
 
     public string AuteurEnTexte(int p_indice)
     {
@@ -41,70 +28,61 @@ public partial class _Default:System.Web.UI.Page
 
     public bool ChampsValides()
     {
+        string titre = txtTitre.Text;
 
-
-        return true;
-    }
-
-    
-
-    public void Lister(string p_requête)
-    {
-        // ListeAlbums.Items.Clear();
-
-        switch (grChoixTri.SelectedIndex)
+        if (titre.Length > 50)
         {
-            case 0: p_requête += "ORDER BY numéro"; break;
-            case 1: p_requête += "ORDER BY année_parution, titre"; break;
+            Response.Write("Le titre est trop long : 50 caractères maximum.");
+            return false;
         }
 
-        using (OleDbConnection connexion = new OleDbConnection(chaîneConnexion))
+        int parution = Convert.ToInt32(txtParution.Text);
+
+        if (1961 > parution || parution > DateTime.Now.Year)
         {
-            try
-            {
-                DataTable table;
-                using (OleDbCommand commande = new OleDbCommand(
-                    "SELECT * " +
-                    "FROM albums ", connexion))
-                {
-                    commande.CommandType = CommandType.Text;
-                    connexion.Open();
-                    using (OleDbDataReader reader = commande.ExecuteReader())
-                    {
-                        
-                        //while (reader.Read())
-                        //{
+            Response.Write("L'année doit être comprise entre 2 et 100 et doit être paire.");
+            return false;
+        }
 
-                        //    ListeAlbums.Items.Add(String.Format("{0, 7} {1, 50} {2, 30} {3, 8} {4} {5}",
-                        //        reader["numéro"].ToString(), reader["titre"].ToString(),
-                        //        AuteurEnTexte((int)reader["auteur"]), reader["année_parution"].ToString(),
-                        //        reader["nb_pages"].ToString(), reader["cote"].ToString()));
-                        //}
-                        OleDbDataAdapter adapter = new OleDbDataAdapter(commande);
-                        table = new DataTable();
-                        adapter.Fill(table);
+        int nbPages = Convert.ToInt32(txtNbPages.Text);
 
-                        ListeAlbums.DataSource = reader;
-                        ListeAlbums.DataBind();
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                // Message d'erreur
-            }
+        if (2 > nbPages || nbPages > 100 || nbPages % 2 != 0)
+        {
+            Response.Write("Le nombre de pages doit être compris entre 2 et 100 et doit être paire.");
+            return false;
+        }
 
-        } 
+        double cote = Convert.ToDouble(txtCote.Text);
+
+        if (0 > cote || cote > 10)
+        {
+            Response.Write("La cote doit être comprise entre 0 et 10.");
+            return false;
+        }
+
+        Auteur auteur = (Auteur)grChoixAuteur.SelectedIndex;
+
+        m_album = new Album(m_db.GénérerProchainNuméro(), titre, parution, nbPages, cote, auteur);
+        return true;
     }
 
     public void InitialiserChamps()
     {
         txtTitre.Text = "";
         grChoixAuteur.SelectedIndex = 0;
-        grChoixTri.SelectedIndex = m_indiceTri;
         txtParution.Text = "";
         txtNbPages.Text = "";
         txtCote.Text = "";
+    }
+
+    public void Lister()
+    {
+        foreach (Album album in m_db.TousLesAlbums(grChoixTri.SelectedIndex))
+        {
+            string txt = String.Format("{0, 10} {1, 50} {2, 30} {3, 15} {4} {5}",
+                                                album.Numéro, album.Titre, AuteurEnTexte((int)album.Auteur), album.AnnéeParution, album.NombrePages, album.Cote);
+            ListeAlbums.Items.Add(txt);
+        }
     }
 
     protected void btnAjouter_Click(object sender, EventArgs e)
@@ -117,12 +95,12 @@ public partial class _Default:System.Web.UI.Page
 
     protected void btnRechercher_Click(object sender, EventArgs e)
     {
-        Lister(SqlLister);
+
     }
 
     protected void grChoixTri_SelectedIndexChanged(object sender, EventArgs e)
     {
-        m_indiceTri = grChoixTri.SelectedIndex;
+
     }
 
     public Album Extraire()
