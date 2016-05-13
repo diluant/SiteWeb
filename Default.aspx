@@ -68,7 +68,8 @@
             </div> <!-- Aside -->
 
             <div class="main">
-                <asp:ListBox ID="ListeAlbums" runat="server" Width="575px"></asp:ListBox>
+
+                <asp:ListBox ID="ListeAlbums" runat="server" Height="308px" Width="575px"></asp:ListBox>
                 <asp:RadioButtonList ID="grChoixTri" runat="server">
                     <asp:ListItem>Lister par numéro d&#39;album</asp:ListItem>
                     <asp:ListItem>Lister par date de parution</asp:ListItem>

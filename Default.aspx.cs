@@ -2,6 +2,7 @@
 using System.Data.OleDb;
 using System.Data;
 using System.Collections.Generic;
+using System.Web;
 
 public partial class _Default:System.Web.UI.Page
 {
@@ -79,10 +80,15 @@ public partial class _Default:System.Web.UI.Page
     {
         foreach (Album album in m_db.TousLesAlbums(grChoixTri.SelectedIndex))
         {
-            string txt = String.Format("{0, 10} {1, 50} {2, 30} {3, 15} {4} {5}",
-                                                album.Numéro, album.Titre, AuteurEnTexte((int)album.Auteur), album.AnnéeParution, album.NombrePages, album.Cote);
-            ListeAlbums.Items.Add(txt);
+            string txt = String.Format("{0}\t{1, 50} {2, 30} {3, 15} {4} {5}",
+                                                album.Numéro, album.Titre, UtilAuteur.EnTexte(album.Auteur), album.AnnéeParution, album.NombrePages, album.Cote);
+            ListeAlbums.Items.Add(HttpUtility.HtmlDecode("&nbsp;&nbsp;") + txt);
         }
+    }
+
+    public string Espaces()
+    {
+        return "";
     }
 
     protected void btnAjouter_Click(object sender, EventArgs e)

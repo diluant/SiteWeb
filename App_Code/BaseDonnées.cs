@@ -158,8 +158,7 @@ public class BaseDonnées
 
         commande.CommandType = CommandType.Text;
         m_db.Open();
-        OleDbDataReader reader = commande.ExecuteReader();
-        int cpt = (int)reader["valeurCompteur"];
+        int cpt = (int)commande.ExecuteScalar(); ;
 
         commande = new OleDbCommand(String.Format(
             "UPDATE Compteur (valeurCompteur)" +
