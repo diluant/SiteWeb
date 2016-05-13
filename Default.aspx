@@ -68,8 +68,14 @@
             </div> <!-- Aside -->
 
             <div class="main">
-
-                <asp:ListBox ID="ListeAlbums" runat="server" Height="308px" Width="575px"></asp:ListBox>
+                <asp:DataList ID="DataList1" runat="server" Height="304px" RepeatColumns="6" RepeatDirection="Horizontal" Width="600px">
+                    <ItemTemplate>
+                        Numéro:&nbsp; Titre:&nbsp; Auteur:&nbsp; Parution:&nbsp; Nombre de pages: Cote:<br />       <asp:Label ID="Numéro" runat="server" Text='<%# Eval("Numéro") %>' />       <asp:Label ID="Titre" runat="server" Text='<%# Eval("Titre") %>' />       <asp:Label ID="Auteur" runat="server" Text='<%# Eval("Auteur") %>' />       <asp:Label ID="Parution" runat="server" Text='<%# Eval("AnnéeParution") %>' />       <asp:Label ID="NombrePages" runat="server" Text='<%# Eval("NombrePages") %>' />       <asp:Label ID="Cote" runat="server" Text='<%# Eval("Cote") %>' /><br />
+                        <br />
+                        <br />
+                    </ItemTemplate>
+                </asp:DataList>
+                <asp:SqlDataSource ID="SqlDataSource1" runat="server"></asp:SqlDataSource>
                 <asp:RadioButtonList ID="grChoixTri" runat="server">
                     <asp:ListItem>Lister par numéro d&#39;album</asp:ListItem>
                     <asp:ListItem>Lister par date de parution</asp:ListItem>

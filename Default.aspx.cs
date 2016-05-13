@@ -78,11 +78,13 @@ public partial class _Default:System.Web.UI.Page
 
     public void Lister()
     {
+        DataList1.DataSource = m_db.TousLesAlbums(grChoixTri.SelectedIndex);
+        DataList1.DataBind();
+        DataList1.Visible = true;
         foreach (Album album in m_db.TousLesAlbums(grChoixTri.SelectedIndex))
         {
             string txt = String.Format("{0}\t{1, 50} {2, 30} {3, 15} {4} {5}",
-                                                album.Numéro, album.Titre, UtilAuteur.EnTexte(album.Auteur), album.AnnéeParution, album.NombrePages, album.Cote);
-            ListeAlbums.Items.Add(HttpUtility.HtmlDecode("&nbsp;&nbsp;") + txt);
+                album.Numéro, album.Titre, UtilAuteur.EnTexte(album.Auteur), album.AnnéeParution, album.NombrePages, album.Cote);
         }
     }
 
